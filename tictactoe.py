@@ -12,20 +12,65 @@ screen.fill(BG_COLOR)
 class Board:
     def __init__(self) -> None:
         self.squares = np.zeros((ROWS,COL))
+        self.empty_sqrs = self.squares
+        self.mark_sqrs = 0
+
+    def final_state(self):
+        '''
         
+        '''
+
+        #vertical wins
+        for col in range (COL):
+            if self.square[0][col] == self.square[1][col] == self.squares[2][col] != 0:
+              return self.square[0][col]
+
+        #Horizontal wins
+        for row in range (ROWS):
+            if self.square[0][row] == self.square[1][row] == self.squares[2][row] != 0:
+              return self.square[row][0]
+
+        #Desc Diagonal
+        if self.square[0][0] == self.squares[1][1] == self.square[2][2] != 0:
+            return self.square[1][1]
+
+        #Asc Diagonal
+        if self.square[2][0] == self.squares[1][1] == self.square[0][2] != 0:
+            return self.square[1][1] 
+        
+        #No wins yet
+        return 0   
 
     def mark_square(self,row,col,player):
         self.squares[row][col] = player
-
+        self.marked_sqrs += 1
     
     def empty_square(self,row,col):
         return self.squares[row][col] == 0
+    
+    def get_empty_square(self):
+        empty_sqrs = []
+        for row in range(ROWS):
+            for col in range(COL):
+                if self.empty_square(row,col):
+                        empty_sqrs.append((row,col))
+        return empty_sqrs
+    
+    def isfull(self):
+        return self.mark_sqrs == 9
+    
+    def isempty(self):
+        return self.mark_sqrs == 0
+
 
 class Game:
 
     def __init__(self):
         self.board = Board()
+        # self.ai = AI()
         self.player = 1 #player1 - zero, player2 - cross
+        self.gamemode = 'PVP'
+        self.running = True
         self.showlines()
 
     def showlines(self):
